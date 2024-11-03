@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agrasen Mansion Hostel Snacks</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://unpkg.com/lucide-static/font/lucide.css" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Main Shop Page -->
+        <div id="shop-page" class="page active">
+            <header>
+                <div class="container">
+                    <div class="header-content">
+                        <div class="logo">
+                            <i class="lucide-shopping-bag"></i>
+                            <h1>Agrasen Mansion Hostel Snacks</h1>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="container">
+                <div class="products-grid">
+                    <!-- Product Card 1 -->
+                    <div class="product-card">
+                        <img src="img/lays-american.jpg"">
+                        <div class="product-info">
+                            <h3>Lay's American Style Cream & Onion</h3>
+                            <p>4 units left!</p>
+                            <div class="product-actions">
+                                <div class="price-container">
+                                    <span class="price">₹45</span>
+                                    <span class="mrp">MRP ₹50</span>
+                                </div>
+                                <div class="quantity-controls" data-id="1">
+                                    <button class="quantity-btn minus hidden">
+                                        <i class="lucide-minus"></i>
+                                    </button>
+                                    <span class="quantity hidden">0</span>
+                                    <button class="add-to-cart" data-id="1" data-price="45">
+                                        <i class="lucide-plus"></i>
+                                        Add
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Product Card 2 -->
+                    <div class="product-card">
+                        <img src="./img/lays-india.jpg" alt="Lay's Classic">
+                        <div class="product-info">
+                            <h3>Lay's India's Magic Masala</h3>
+                            <p>4 units left!</p>
+                            <div class="product-actions">
+                                <div class="price-container">
+                                    <span class="price">₹45</span>
+                                    <span class="mrp">MRP ₹50</span>
+                                </div>
+                                <div class="quantity-controls" data-id="1">
+                                    <button class="quantity-btn minus hidden">
+                                        <i class="lucide-minus"></i>
+                                    </button>
+                                    <span class="quantity hidden">0</span>
+                                    <button class="add-to-cart" data-id="1" data-price="45">
+                                        <i class="lucide-plus"></i>
+                                        Add
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product Card 3 -->
+                    <div class="product-card">
+                        <img src="./img/kurkure.jpg" alt="Kurkure">
+                        <div class="product-info">
+                            <h3>Kurkure Masala Munch</h3>
+                            <p>3 units left!</p>
+                            <div class="product-actions">
+                                <div class="price-container">
+                                    <span class="price">₹20</span>
+                                    <span class="mrp">@MRP</span>
+                                </div>
+                                <div class="quantity-controls" data-id="2">
+                                    <button class="quantity-btn minus hidden">
+                                        <i class="lucide-minus"></i>
+                                    </button>
+                                    <span class="quantity hidden">0</span>
+                                    <button class="add-to-cart" data-id="2" data-price="20">
+                                        <i class="lucide-plus"></i>
+                                        Add
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product Card 4 -->
+                    <div class="product-card">
+                        <img src="./img/lotte.png" alt="Choco Pie">
+                        <div class="product-info">
+                            <h3>Lotte Choco Pie</h3>
+                            <p>12 units left.</p>
+                            <div class="product-actions">
+                                <div class="price-container">
+                                    <span class="price">₹15</span>
+                                    <span class="mrp">@MRP</span>
+                                </div>
+                                <div class="quantity-controls" data-id="3">
+                                    <button class="quantity-btn minus hidden">
+                                        <i class="lucide-minus"></i>
+                                    </button>
+                                    <span class="quantity hidden">0</span>
+                                    <button class="add-to-cart" data-id="3" data-price="15">
+                                        <i class="lucide-plus"></i>
+                                        Add
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <div id="cart-button" class="hidden">
+                <button onclick="showCheckout()">
+                    <i class="lucide-shopping-cart"></i>
+                    <span id="cart-count">0 items</span>
+                    <span id="cart-total" class="cart-total">₹0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Checkout Page -->
+        <div id="checkout-page" class="page">
+            <div class="container">
+                <button class="back-button" onclick="showShop()">
+                    <i class="lucide-arrow-left"></i>
+                    Back to Shopping
+                </button>
+
+                <div class="checkout-grid">
+                    <!-- Order Summary -->
+                    <div class="checkout-card">
+                        <h2>Order Summary</h2>
+                        <div id="order-items"></div>
+                        <div class="order-total">
+                            <div class="subtotal">
+                                <span>Subtotal</span>
+                                <span id="subtotal">₹0</span>
+                            </div>
+                            <div class="delivery-fee hidden">
+                                <span>Instant Delivery Fee</span>
+                                <span>₹15</span>
+                            </div>
+                            <div class="total">
+                                <span>Total</span>
+                                <span id="total">₹0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Options -->
+                    <div class="checkout-card">
+                        <h2>Delivery Options</h2>
+                        <div class="delivery-options">
+                            <label>
+                                <input type="radio" name="delivery" value="pickup" checked>
+                                Pickup from Parking Lot, Agrasen Mansion Boys Hostel(10pm,11pm and 12am)
+                            </label>
+                            <br>
+                            <label>
+                                <input type="radio" name="delivery" value="instant">
+                                Instant Delivery (+₹15)
+                                <br>
+                                <span class="delivery-note">
+                                    (Available 6 PM - 12 AM(midnight)@weekdays &  9AM - 12 AM(midnight)@weekends)
+                                </span>
+                            </label>
+                        </div>
+                        <br>
+
+                        <div id="pickup-time" class="delivery-detail">
+                            <h3>Select Pickup Time</h3>
+                            <select>
+                                <option value="10pm">10:00 PM</option>
+                                <option value="10pm">11:00 PM</option>
+                                <option value="12am">12:00 AM</option>
+                            </select>
+                        </div>
+
+                        <div id="room-number" class="delivery-detail hidden">
+                            <h3>Room Number</h3>
+                            <input type="text" placeholder="Enter your room number">
+                        </div>
+                        <BR></BR>
+
+                        <h2>Payment Options</h2>
+                        <div class="payment-options">
+                            <button class="payment-button gpay">
+                                <i class="lucide-credit-card"></i>
+                                Pay with Google Pay
+                            </button>
+                            <button class="payment-button upi">
+                                <i class="lucide-smartphone"></i>
+                                Pay with UPI
+                            </button>
+                            <button class="payment-button cod" onclick="handleCodClick()">
+                                <i class="lucide-wallet"></i>
+                                Cash on Delivery
+                            </button>
+                            <div id="cod-warning" class="warning-message hidden">
+                                <i class="lucide-alert-circle"></i>
+                                <p>Please ensure you have the exact amount ready. No change will be provided at delivery.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

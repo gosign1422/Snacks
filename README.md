@@ -1,2 +1,2 @@
 # Snacks
- A website for the midnight cravings of my hostelmates.
+ A website for the midnight cravings of my hostel mates.
