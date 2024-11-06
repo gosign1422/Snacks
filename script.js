@@ -1,6 +1,7 @@
 // Cart state
 let cart = [];
 let total = 0;
+let isFirstTimeUser = !localStorage.getItem('hasVisitedBefore');
 
 // DOM Elements
 const cartButton = document.getElementById('cart-button');
@@ -15,6 +16,7 @@ const deliveryFee = document.querySelector('.delivery-fee');
 const pickupTime = document.getElementById('pickup-time');
 const roomNumber = document.getElementById('room-number');
 const codWarning = document.getElementById('cod-warning');
+const cartTooltip = document.getElementById('cart-tooltip');
 
 // Add to cart functionality
 document.querySelectorAll('.quantity-controls').forEach(control => {
@@ -22,49 +24,57 @@ document.querySelectorAll('.quantity-controls').forEach(control => {
     const minusBtn = control.querySelector('.quantity-btn.minus');
     const quantitySpan = control.querySelector('.quantity');
     const productId = parseInt(control.dataset.id);
+    const maxQuantity = parseInt(control.dataset.max);
 
-    addBtn.addEventListener('click', () => updateQuantity(productId, 1));
-    minusBtn?.addEventListener('click', () => updateQuantity(productId, -1));
+    addBtn.addEventListener('click', () => updateQuantity(productId, 1, maxQuantity));
+    minusBtn?.addEventListener('click', () => updateQuantity(productId, -1, maxQuantity));
 });
 
-function updateQuantity(productId, change) {
-    const control = document.querySelector(`.quantity-controls[data-id="${productId}"]`);
-    const addBtn = control.querySelector('.add-to-cart');
-    const minusBtn = control.querySelector('.quantity-btn.minus');
-    const quantitySpan = control.querySelector('.quantity');
-    const price = parseInt(addBtn.dataset.price);
-    const name = control.closest('.product-card').querySelector('h3').textContent;
+function updateQuantity(productId, change, maxQuantity) {
+    const controls = document.querySelectorAll(`.quantity-controls[data-id="${productId}"]`);
+    controls.forEach(control => {
+        const addBtn = control.querySelector('.add-to-cart');
+        const minusBtn = control.querySelector('.quantity-btn.minus');
+        const quantitySpan = control.querySelector('.quantity');
+        const price = parseInt(addBtn.dataset.price);
+        const name = control.closest('.product-card').querySelector('h3').textContent;
 
-    let item = cart.find(i => i.id === productId);
-    
-    if (!item && change > 0) {
-        item = { id: productId, name, price, quantity: 0 };
-        cart.push(item);
-    }
-
-    if (item) {
-        item.quantity += change;
+        let item = cart.find(i => i.id === productId);
         
-        if (item.quantity <= 0) {
-            cart = cart.filter(i => i.id !== productId);
-            minusBtn.classList.add('hidden');
-            quantitySpan.classList.add('hidden');
-            addBtn.classList.remove('hidden');
-        } else {
-            minusBtn.classList.remove('hidden');
-            quantitySpan.classList.remove('hidden');
-            addBtn.classList.add('hidden');
-            quantitySpan.textContent = item.quantity;
+        if (!item && change > 0) {
+            item = { id: productId, name, price, quantity: 0 };
+            cart.push(item);
         }
-    }
+
+        if (item) {
+            const newQuantity = item.quantity + change;
+            if (newQuantity <= maxQuantity && newQuantity >= 0) {
+                item.quantity = newQuantity;
+                
+                if (item.quantity <= 0) {
+                    cart = cart.filter(i => i.id !== productId);
+                    minusBtn.classList.add('hidden');
+                    quantitySpan.classList.add('hidden');
+                    addBtn.classList.remove('hidden');
+                } else {
+                    minusBtn.classList.remove('hidden');
+                    quantitySpan.classList.remove('hidden');
+                    addBtn.classList.add('hidden');
+                    quantitySpan.textContent = item.quantity;
+                }
+            }
+        }
+    });
 
     updateCart();
+    showTooltipIfFirstTime();
 }
 
 // Update cart display
 function updateCart() {
     if (cart.length === 0) {
         cartButton.classList.add('hidden');
+        cartTooltip.classList.add('hidden');
         return;
     }
 
@@ -76,6 +86,18 @@ function updateCart() {
     cartTotal.textContent = `₹${total}`;
     
     updateCheckout();
+}
+
+function showTooltipIfFirstTime() {
+    if (isFirstTimeUser && cart.length > 0) {
+        cartTooltip.classList.remove('hidden');
+        localStorage.setItem('hasVisitedBefore', 'true');
+    }
+}
+
+function dismissTooltip() {
+    cartTooltip.classList.add('hidden');
+    isFirstTimeUser = false;
 }
 
 // Update checkout display
@@ -115,9 +137,69 @@ function updateTotal() {
     totalElement.textContent = `₹${finalTotal}`;
 }
 
-// Handle COD warning
-function handleCodClick() {
-    codWarning.classList.remove('hidden');
+// Payment Integration
+function handleOnlinePayment() {
+    try {
+        const finalAmount = getFinalAmount();
+        if (!finalAmount || finalAmount <= 0) {
+            alert("Invalid payment amount. Please check your cart.");
+            return;
+        }
+
+        const upiId = "yashgusain6002@okhdfcbank"; // actual UPI ID
+        const merchantName = "Agrasen Mansion Hostel Snacks";
+        const transactionNote = `Order Payment - ${cart.map(item => `${item.name} x ${item.quantity}`).join(', ')}`;
+
+        // Ensure cart is not empty
+        if (!cart.length) {
+            alert("Your cart is empty. Please add items to proceed.");
+            return;
+        }
+
+        // Create UPI intent link with common parameters for all UPI apps
+        const upiIntent = {
+            pa: upiId,
+            pn: merchantName,
+            tr: generateTransactionId(),
+            am: finalAmount.toFixed(2), // Format to two decimal places for currency accuracy
+            cu: 'INR',
+            tn: transactionNote
+        };
+        const intentUrl = `upi://pay?${new URLSearchParams(upiIntent).toString()}`;
+
+        // Display a "Processing Payment" message
+        alert("Processing the payment. Please wait...");
+
+        // Check if the user is on a mobile device
+        if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+            // Redirect to the UPI intent URL to open available UPI apps
+            window.location.href = intentUrl;
+
+            // Fallback alert if the UPI app does not open within 2.5 seconds
+            setTimeout(() => {
+                if (document.hidden) return; // User successfully left for the payment app
+                alert("If the UPI app didn't open, please try again from a supported UPI app.");
+            }, 2500);
+        } else {
+            // Notify the user if on desktop, as UPI payments require a mobile device
+            alert("UPI payments can only be initiated from a mobile device. Please try using a mobile UPI app.");
+        }
+    } catch (error) {
+        console.error("Error initiating payment:", error);
+        alert("An error occurred while trying to initiate the payment. Please try again.");
+    }
+}
+
+// Generate a unique transaction ID
+function generateTransactionId() {
+    return `ORDER${Date.now()}${Math.random().toString(36).substr(2, 9)}`;
+}
+
+// Calculate the final amount based on delivery type and cart total
+function getFinalAmount() {
+    const isInstantDelivery = document.querySelector('input[name="delivery"]:checked').value === 'instant';
+    const deliveryFee = isInstantDelivery ? 15 : 0;
+    return total + deliveryFee;
 }
 
 // Navigation functions
@@ -131,3 +213,13 @@ function showShop() {
     checkoutPage.classList.remove('active');
     shopPage.classList.add('active');
 }
+
+// Handle COD warning
+function handleCodClick() {
+    codWarning.classList.remove('hidden');
+}
+
+// Add event listeners to payment buttons
+document.querySelector('.payment-button.gpay').addEventListener('click', handleGooglePay);
+document.querySelector('.payment-button.upi').addEventListener('click', handleUPI);
+document.querySelector('.payment-button.cod').addEventListener('click', handleCodClick);

@@ -1,4 +1,16 @@
-<!DOCTYPE html>
+<!doctype html>                                                                                                                                                                                                                                                
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,8 +21,15 @@
 </head>
 <body>
     <div id="app">
-        <!-- Main Shop Page -->
+        <!-- First-time user tooltip -->
+        <div id="cart-tooltip" class="tooltip hidden">
+            Click here to proceed to checkout!
+            <button class="tooltip-close" onclick="dismissTooltip()">×</button>
+        </div>
+
+        <!-- Rest of the HTML remains the same until the quantity controls -->
         <div id="shop-page" class="page active">
+            <!-- Header remains the same -->
             <header>
                 <div class="container">
                     <div class="header-content">
@@ -26,7 +45,7 @@
                 <div class="products-grid">
                     <!-- Product Card 1 -->
                     <div class="product-card">
-                        <img src="img/lays-american.jpg"">
+                        <img src="img/lays-american.jpg" alt="Lay's American">
                         <div class="product-info">
                             <h3>Lay's American Style Cream & Onion</h3>
                             <p>4 units left!</p>
@@ -35,7 +54,7 @@
                                     <span class="price">₹45</span>
                                     <span class="mrp">MRP ₹50</span>
                                 </div>
-                                <div class="quantity-controls" data-id="1">
+                                <div class="quantity-controls" data-id="1" data-max="4">
                                     <button class="quantity-btn minus hidden">
                                         <i class="lucide-minus"></i>
                                     </button>
@@ -48,6 +67,7 @@
                             </div>
                         </div>
                     </div>
+
                     <!-- Product Card 2 -->
                     <div class="product-card">
                         <img src="./img/lays-india.jpg" alt="Lay's Classic">
@@ -59,12 +79,12 @@
                                     <span class="price">₹45</span>
                                     <span class="mrp">MRP ₹50</span>
                                 </div>
-                                <div class="quantity-controls" data-id="1">
+                                <div class="quantity-controls" data-id="2" data-max="4">
                                     <button class="quantity-btn minus hidden">
                                         <i class="lucide-minus"></i>
                                     </button>
                                     <span class="quantity hidden">0</span>
-                                    <button class="add-to-cart" data-id="1" data-price="45">
+                                    <button class="add-to-cart" data-id="2" data-price="45">
                                         <i class="lucide-plus"></i>
                                         Add
                                     </button>
@@ -84,12 +104,12 @@
                                     <span class="price">₹20</span>
                                     <span class="mrp">@MRP</span>
                                 </div>
-                                <div class="quantity-controls" data-id="2">
+                                <div class="quantity-controls" data-id="3" data-max="3">
                                     <button class="quantity-btn minus hidden">
                                         <i class="lucide-minus"></i>
                                     </button>
                                     <span class="quantity hidden">0</span>
-                                    <button class="add-to-cart" data-id="2" data-price="20">
+                                    <button class="add-to-cart" data-id="3" data-price="20">
                                         <i class="lucide-plus"></i>
                                         Add
                                     </button>
@@ -109,12 +129,12 @@
                                     <span class="price">₹15</span>
                                     <span class="mrp">@MRP</span>
                                 </div>
-                                <div class="quantity-controls" data-id="3">
+                                <div class="quantity-controls" data-id="4" data-max="12">
                                     <button class="quantity-btn minus hidden">
                                         <i class="lucide-minus"></i>
                                     </button>
                                     <span class="quantity hidden">0</span>
-                                    <button class="add-to-cart" data-id="3" data-price="15">
+                                    <button class="add-to-cart" data-id="4" data-price="15">
                                         <i class="lucide-plus"></i>
                                         Add
                                     </button>
@@ -130,9 +150,10 @@
                     <i class="lucide-shopping-cart"></i>
                     <span id="cart-count">0 items</span>
                     <span id="cart-total" class="cart-total">₹0</span>
+                    <span class="checkout-text">Proceed to Checkout</span>
                 </button>
             </div>
-        </div>
+        </div>                    
 
         <!-- Checkout Page -->
         <div id="checkout-page" class="page">
@@ -200,13 +221,9 @@
 
                         <h2>Payment Options</h2>
                         <div class="payment-options">
-                            <button class="payment-button gpay">
+                            <button class="payment-button gpay" onclick="handleOnlinePayment()">
                                 <i class="lucide-credit-card"></i>
-                                Pay with Google Pay
-                            </button>
-                            <button class="payment-button upi">
-                                <i class="lucide-smartphone"></i>
-                                Pay with UPI
+                                Pay Online (recommended)
                             </button>
                             <button class="payment-button cod" onclick="handleCodClick()">
                                 <i class="lucide-wallet"></i>
