@@ -172,14 +172,30 @@ function handleOnlinePayment() {
 
         // Check if the user is on a mobile device
         if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-            // Redirect to the UPI intent URL to open available UPI apps
-            window.location.href = intentUrl;
+            // For iOS devices, use a slightly different approach
+            if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                // Create an invisible iframe to attempt opening the UPI app
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = intentUrl;
+                document.body.appendChild(iframe);
 
-            // Fallback alert if the UPI app does not open within 2.5 seconds
-            setTimeout(() => {
-                if (document.hidden) return; // User successfully left for the payment app
-                alert("If the UPI app didn't open, please try again from a supported UPI app.");
-            }, 2500);
+                // Fallback alert if the UPI app does not open within 2.5 seconds
+                setTimeout(() => {
+                    if (document.hidden) return; // User successfully left for the payment app
+                    alert("If the UPI app didn't open, please try again from a supported UPI app.");
+                    document.body.removeChild(iframe);
+                }, 2500);
+            } else {
+                // For Android devices, redirect directly to the UPI intent URL
+                window.location.href = intentUrl;
+
+                // Fallback alert if the UPI app does not open within 2.5 seconds
+                setTimeout(() => {
+                    if (document.hidden) return; // User successfully left for the payment app
+                    alert("If the UPI app didn't open, please try again from a supported UPI app.");
+                }, 2500);
+            }
         } else {
             // Notify the user if on desktop, as UPI payments require a mobile device
             alert("UPI payments can only be initiated from a mobile device. Please try using a mobile UPI app.");
@@ -199,9 +215,10 @@ function generateTransactionId() {
 function getFinalAmount() {
     const isInstantDelivery = document.querySelector('input[name="delivery"]:checked').value === 'instant';
     const deliveryFee = isInstantDelivery ? 15 : 0;
-    return total + deliveryFee;
+    return total + deliveryFee;                                        
+  
+  
 }
-
 // Navigation functions
 function showCheckout() {
     shopPage.classList.remove('active');
@@ -219,7 +236,3 @@ function handleCodClick() {
     codWarning.classList.remove('hidden');
 }
 
-// Add event listeners to payment buttons
-document.querySelector('.payment-button.gpay').addEventListener('click', handleGooglePay);
-document.querySelector('.payment-button.upi').addEventListener('click', handleUPI);
-document.querySelector('.payment-button.cod').addEventListener('click', handleCodClick);

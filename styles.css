@@ -10,6 +10,7 @@
     --green-hover: #15803d;
 }
 
+
 * {
     margin: 0;
     padding: 0;
@@ -360,3 +361,156 @@ header {
 .page.active {
     display: block;
 }
+
+/* Suggestion Section */
+.suggestion-section {
+    margin-top: 2rem;
+    padding: 2rem;
+    background-color: var(--bg-card);
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.suggestion-section:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 8px -1px rgba(236, 232, 232, 0.2);
+}
+
+.suggestion-section h2 {
+    color: var(--accent);
+    margin-bottom: 1rem;
+}
+
+.suggestion-section p {
+    color: var(--text-gray);
+    margin-bottom: 1.5rem;
+}
+
+.suggestion-submit {
+    background-color: var(--accent);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+    display: inline-block;
+}
+
+.suggestion-submit:hover {
+    background-color: #f59e0b;
+    transform: translateY(-3px);
+}
+ /* Beautifiying */
+ body {
+    background: linear-gradient(to bottom, #0f3b57, #1e272e);
+}
+
+.product-card {
+    border: 1px solid #3b3b98;
+}
+.add-to-cart {
+    background-color: #3d7cff;
+}
+.add-to-cart:hover {
+    background-color: #6fa3ef;
+}
+.add-to-cart:hover {
+    background-color: #2ecc71;
+}
+:root {
+    --bg-dark: #1a1a40;  /* Slightly lighter */
+    --bg-card: #2b3448;  /* Slightly darker */
+}
+.product-card {
+    box-shadow: 0 6px 8px -4px rgba(0, 0, 0, 0.2);
+}
+.price {
+    color: #ffaf40;  /* Light orange for attention */
+}
+header {
+    background-color: #008080; /* Vibrant Teal */
+}
+body {
+    background: linear-gradient(to bottom, #0f3b57, #1e272e);
+}
+.checkout-card {
+    background-color: var(--bg-card);
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+.section-card {
+    padding: 3rem;
+}
+.subtotal,
+.delivery-fee,
+.total {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+.checkout-card h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+.total span {
+    color: #ffaf40; /* Highlight total value with light orange */
+    font-weight: bold;
+}
+.payment-button {
+    border-radius: 1rem;
+}
+.payment-button:hover {
+    box-shadow: 0 0 10px rgba(79, 70, 229, 0.6);
+}
+.delivery-option-card {
+    background-color: var(--bg-card);
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid #3b3b98;
+    margin-bottom: 1rem;
+}
+.progress-indicator {
+    text-align: center;
+    margin: 2rem 0;
+    color: var(--text-gray);
+}
+.progress-indicator {
+    text-align: center;
+    margin: 2rem 0;
+    color: var(--text-gray);
+}
+.divider {
+    height: 1px;
+    background-color: #374151;
+    margin: 2rem 0;
+}
+.payment-button.gpay {
+    background: linear-gradient(45deg, #16a34a, #15803d);
+}
+.badge {
+    background-color: #ffaf40;
+    color: #111827;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
+}
+@media (max-width: 768px) {
+    .section-card {
+        padding: 1.5rem;
+    }
+    .payment-options {
+        flex-direction: column;
+    }
+}
+
+
+
+
+
